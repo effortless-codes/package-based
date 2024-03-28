@@ -63,7 +63,7 @@ trait WorkingWithPerformable
      */
     public function getUpdatedByColumn(): string
     {
-        return defined(constant_name: 'static::UPDATED_BY') ? static::UPDATED_BY : 'winata.package-based.performable_columns.on_update';
+        return defined(constant_name: 'static::UPDATED_BY') ? static::UPDATED_BY : config('winata.package-based.performable_columns.on_update');
     }
 
     /**

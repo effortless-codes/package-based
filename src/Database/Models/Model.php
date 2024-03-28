@@ -2,6 +2,7 @@
 
 namespace Winata\PackageBased\Database\Models;
 
+use Winata\PackageBased\Database\Models\Concerns\BeforeDeletion;
 use Winata\PackageBased\Database\Models\Concerns\GlobalScope;
 use Winata\PackageBased\Database\Models\Concerns\SoftDeletes;
 use Winata\PackageBased\Database\Models\Concerns\WorkingWithPerformable;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class Model extends LaravelModel
 {
-    use GlobalScope, WorkingWithPerformable;
+    use GlobalScope, WorkingWithPerformable, BeforeDeletion;
 
     /**
      * The list of table which include with schema.
@@ -49,6 +50,7 @@ class Model extends LaravelModel
     /**
      * set performer from performer.
      *
+     * @param string $event
      * @return void
      */
     protected function setPerformedBy(string $event): void

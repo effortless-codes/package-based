@@ -1,9 +1,9 @@
 {
     "name": "winatabayu00/package-based",
-    "description": "Laravel package based to helping develop product",
+    "description": "Laravel package based to helping develop project",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "authors": [
         {
             "name": "Winata bayu",
