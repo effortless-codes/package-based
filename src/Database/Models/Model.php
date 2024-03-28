@@ -13,10 +13,9 @@ use Illuminate\Support\Facades\DB;
 class Model extends LaravelModel
 {
     use GlobalScope, WorkingWithPerformable;
-    use SoftDeletes;
 
     /**
-     * The list of table wich include with schema.
+     * The list of table which include with schema.
      */
     protected string|array $fullTableName = [];
 
