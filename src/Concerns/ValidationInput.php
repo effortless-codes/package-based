@@ -26,13 +26,13 @@ trait ValidationInput
     {
         $validator = Validator::make($inputs, $rules, $messages, $attributes);
 
-        if (request()->hasHeader('content-type') && request()->header('content-type') != 'application/json'){
-            if ($validator->fails()) {
-                return back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-        }
+//        if (request()->hasHeader('content-type') && request()->header('content-type') != 'application/json'){
+//            if ($validator->fails()) {
+//                return back()
+//                    ->withErrors($validator)
+//                    ->withInput();
+//            }
+//        }
 
         $this->setValidatedData($validator->validated());
 
