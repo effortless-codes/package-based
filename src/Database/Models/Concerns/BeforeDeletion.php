@@ -17,11 +17,11 @@ trait BeforeDeletion
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function getRelatedModels(): ?array
     {
-        return (property_exists($this, 'relationChecking') ? $this->relationChecking : null);
+        return (property_exists($this, 'relationChecking') ? $this->relationChecking : []);
     }
 
     /**
