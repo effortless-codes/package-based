@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 abstract class BaseAction
 {
-    public bool $usingDBTransaction = true;
-    public function __construct()
+    public function __construct(
+        public bool $usingDBTransaction = false
+    )
     {
         $rules = $this->rules();
 
