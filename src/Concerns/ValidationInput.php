@@ -5,6 +5,7 @@ namespace Winata\PackageBased\Concerns;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Winata\PackageBased\Abstracts\BaseService;
 
 trait ValidationInput
 {

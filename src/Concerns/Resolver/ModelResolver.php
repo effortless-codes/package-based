@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use ReflectionClass;
 use ReflectionException;
-use Veelasky\LaravelHashId\Eloquent\HashableId;
 
 trait ModelResolver
 {
