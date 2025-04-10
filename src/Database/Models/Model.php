@@ -2,22 +2,29 @@
 
 namespace Winata\PackageBased\Database\Models;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model as LaravelModel;
+use Illuminate\Support\Arr;
 
+/**
+ * Class Model
+ *
+ * Base model with helper for extracting only fillable attributes from a given array.
+ *
+ * @package Winata\PackageBased\Abstracts
+ */
 class Model extends LaravelModel
 {
-
     /**
-     * @param array $data
+     * Extract only the fillable attributes from the given data.
      *
-     * @return array
+     * @param array $data The raw input data.
+     *
+     * @return array The filtered array containing only fillable keys.
      */
     public static function getFillableAttribute(array $data): array
     {
-        $fillable = (new static)->getFillable();
+        $fillable = (new static())->getFillable();
 
         return Arr::only($data, Arr::flatten($fillable));
     }
-
 }

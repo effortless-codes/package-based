@@ -1,21 +1,19 @@
 {
     "name": "winatabayu00/package-based",
-    "description": "Laravel package based to helping develop project",
+    "description": "Laravel base package to help with modular and service-based project development.",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "authors": [
         {
-            "name": "Winata bayu",
+            "name": "Winata Bayu",
             "email": "winatabayu01@email.com"
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "ext-intl": "*",
         "ext-json": "*"
-    },
-    "require-dev": {
     },
     "autoload": {
         "psr-4": {

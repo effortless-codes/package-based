@@ -7,19 +7,31 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Trait ModelResolver
+ *
+ * Provides logic to resolve Eloquent models either by ID or a hashed key,
+ * and determine whether the input is already a valid model instance.
+ *
+ * @package Winata\PackageBased\Concerns\Resolver
+ */
 trait ModelResolver
 {
     /**
-     * Model resolver.
+     * Resolve a model instance based on key (ID or hash) or object.
      *
-     * @param class-string $model
-     * @param string|int|Model $key
-     * @param bool $strict
+     * If the provided `$key` is already an instance of the model, it returns it.
+     * If the model uses `HashableId`, it attempts to resolve it by the hash.
+     * Otherwise, it falls back to `Model::find()`.
      *
-     * @return Model|null
+     * @param class-string<Model> $model  The model class name to resolve.
+     * @param Model|string|int $key       The key to resolve the model by (ID, hash, or model instance).
+     * @param bool $strict                Whether to throw an exception if the model is not found.
      *
-     * @throws ReflectionException
-     * @throws ModelNotFoundException
+     * @return Model|null                 The resolved model instance or null if not found (when not strict).
+     *
+     * @throws ReflectionException        If model class does not exist or reflection fails.
+     * @throws ModelNotFoundException     If the model is not found and strict mode is enabled.
      */
     public function resolveModel(string $model, mixed $key, bool $strict = true): ?Model
     {
@@ -39,21 +51,24 @@ trait ModelResolver
             $found = $model::find($key);
         }
 
-        if ($strict && false === $found instanceof Model) {
+        if ($strict && !($found instanceof Model)) {
             throw (new ModelNotFoundException())->setModel($model);
         }
 
-        // as is.
         return $found;
     }
 
     /**
-     * @param string $model
-     * @param string|int $key
+     * Resolve the actual model key (ID) from a hash string, if applicable.
      *
-     * @return int|string|null
+     * Useful when dealing with URLs or APIs that pass hash-encoded identifiers.
      *
-     * @throws ReflectionException
+     * @param class-string<Model> $model  The model class name.
+     * @param string|int $key             The hash or numeric ID.
+     *
+     * @return int|string|null            The resolved model ID or the raw key if no transformation is needed.
+     *
+     * @throws ReflectionException        If model class does not exist or reflection fails.
      */
     public function resolveModelKey(string $model, string|int $key): int|string|null
     {
@@ -61,15 +76,14 @@ trait ModelResolver
 
         $found = null;
 
-        if (in_array(HashableId::class, $reflection->getTraitNames()) && is_string($key) && !is_null($key)) {
+        if (
+            in_array(HashableId::class, $reflection->getTraitNames()) &&
+            is_string($key) &&
+            !is_null($key)
+        ) {
             $found = $model::hashToId($key);
         }
 
-        if (is_null($found)) {
-            $found = $key;
-        }
-
-        // as is.
-        return $found;
+        return $found ?? $key;
     }
 }
