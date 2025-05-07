@@ -2,7 +2,11 @@
 
 namespace Winata\PackageBased\Concerns;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Container\Container;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
@@ -28,35 +32,41 @@ trait ValidationInput
      * Validates the given input data using the provided rules.
      * If the request is not JSON, it may return a redirect response on failure.
      *
-     * @param array $inputs     The data to be validated.
-     * @param array $rules      The validation rules.
-     * @param array $messages   Custom error messages (optional).
+     * @param Request|array $inputs The data to be validated.
+     * @param array $rules The validation rules.
+     * @param array $messages Custom error messages (optional).
      * @param array $attributes Custom attribute names (optional).
      *
      * @return array|RedirectResponse The validated data or redirect on failure.
      *
+     * @throws AuthorizationException
      * @throws ValidationException If validation fails in a JSON context.
      */
     public function validate(
-        array $inputs,
+        Request|array $inputs,
         array $rules,
         array $messages = [],
         array $attributes = []
     ): array|RedirectResponse {
-        /** @var ValidatorContract $validator */
-        $validator = Validator::make($inputs, $rules, $messages, $attributes)->validate();
+        if ($inputs instanceof Request) {
+            if (!$inputs->authorize())
+                throw new AuthorizationException("You are unauthorized to access this resource");
+            $validator = Validator::make($inputs->input(), $inputs->rules(), $inputs->messages());
 
+        } else {
+            $validator = Validator::make($inputs, $rules, $messages, $attributes);
+
+        }
         if (!request()->expectsJson() && $validator->fails()) {
             return back()
                 ->withErrors($validator)
                 ->withInput();
         }
+        $validatedData = $validator->validated();
 
-        $validated = $validator->validated();
+        $this->setValidatedData($validatedData);
 
-        $this->setValidatedData($validated);
-
-        return $validated;
+        return $validatedData;
     }
 
     /**
