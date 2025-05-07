@@ -44,7 +44,7 @@ trait ValidationInput
         array $attributes = []
     ): array|RedirectResponse {
         /** @var ValidatorContract $validator */
-        $validator = Validator::make($inputs, $rules, $messages, $attributes);
+        $validator = Validator::make($inputs, $rules, $messages, $attributes)->validate();
 
         if (!request()->expectsJson() && $validator->fails()) {
             return back()
