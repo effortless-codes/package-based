@@ -3,7 +3,7 @@
     "description": "Laravel base package to help with modular and service-based project development.",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "authors": [
         {
             "name": "Winata Bayu",

@@ -57,12 +57,12 @@ trait ValidationInput
             $validator = Validator::make($inputs, $rules, $messages, $attributes);
 
         }
-        if (!request()->expectsJson() && $validator->fails()) {
+        $validatedData = $validator->validated();
+        if (!request()->expectsJson() && $validator->fails() && !config('winata.response.force_to_json')) {
             return back()
                 ->withErrors($validator)
                 ->withInput();
         }
-        $validatedData = $validator->validated();
 
         $this->setValidatedData($validatedData);
 
